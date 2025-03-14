@@ -1,0 +1,159 @@
+---
+description: 
+globs: app/models/
+alwaysApply: false
+---
+ ---
+description: Best practices for background jobs in Rails/Folio projects
+globs:
+alwaysApply: false
+---
+
+You are an expert in background job processing and optimization for Ruby on Rails applications.
+
+Job Structure
+- Follow consistent job organization:
+  ```ruby
+  class ProcessMediaJob < ApplicationJob
+    queue_as :media
+    
+    retry_on StandardError, wait: :exponentially_longer, attempts: 3
+    discard_on ActiveRecord::RecordNotFound
+    
+    def perform(media_id)
+      media = Media.find(media_id)
+      process_media(media)
+    end
+  end
+  ```
+
+Queue Configuration
+- Organize queues by priority and purpose:
+  ```ruby
+  # config/sidekiq.yml
+  :queues:
+    - [critical, 4]
+    - [default, 2]
+    - [mailers, 2]
+    - [low, 1]
+  ```
+- Set appropriate concurrency
+- Configure queue sizes
+- Define retry strategies
+
+Error Handling
+- Implement comprehensive error handling:
+  ```ruby
+  def perform(record_id)
+    record = Record.find(record_id)
+    process_record(record)
+  rescue StandardError => e
+    Rails.logger.error("Job failed: #{e.message}")
+    notify_error_tracking(e)
+    raise
+  end
+  ```
+- Log errors appropriately
+- Set up error notifications
+- Handle dead letter queues
+
+Performance Optimization
+- Batch processing:
+  ```ruby
+  def perform(record_ids)
+    Record.where(id: record_ids).find_each do |record|
+      process_record(record)
+    end
+  end
+  ```
+- Use bulk operations
+- Implement pagination
+- Optimize memory usage
+
+Scheduling
+- Configure recurring jobs:
+  ```ruby
+  class DailySummaryJob
+    include Sidekiq::Scheduler
+    
+    def perform
+      User.find_each do |user|
+        generate_summary(user)
+      end
+    end
+  end
+  ```
+- Set appropriate intervals
+- Handle timezone differences
+- Monitor job duration
+
+Monitoring
+- Track job metrics:
+  - Queue size
+  - Processing time
+  - Error rates
+  - Memory usage
+- Set up alerting
+- Monitor worker health
+- Track job completion
+
+Resource Management
+- Control memory usage
+- Manage CPU utilization
+- Handle I/O operations
+- Monitor database connections
+
+Testing
+- Test job logic:
+  ```ruby
+  RSpec.describe ProcessMediaJob do
+    it "processes media correctly" do
+      media = create(:media)
+      expect {
+        described_class.perform_now(media.id)
+      }.to change { media.reload.processed }.to(true)
+    end
+  end
+  ```
+- Verify retry behavior
+- Test error scenarios
+- Check queue handling
+
+Job Dependencies
+- Handle job ordering
+- Manage dependencies
+- Chain jobs appropriately
+- Handle failure cascades
+
+Data Consistency
+- Use transactions when needed
+- Handle race conditions
+- Implement idempotency
+- Manage stale data
+
+Security
+- Validate job parameters
+- Handle sensitive data
+- Implement access controls
+- Audit job execution
+
+Deployment
+- Zero-downtime deployment
+- Handle job drainage
+- Manage queue migration
+- Monitor job backlog
+
+Common Patterns
+- Email processing
+- File processing
+- Data aggregation
+- Cleanup tasks
+- Report generation
+- API synchronization
+- Cache warming
+
+Documentation
+- Document job purpose
+- Specify dependencies
+- Include usage examples
+- Document failure scenarios

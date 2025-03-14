@@ -1,0 +1,288 @@
+{
+  /* General configuration
+   * Basic settings that apply to all file types
+   * and determine editor behavior
+   */
+  "formatOnSave": true, // automatic formatting on save for consistent style
+  "autoIndent": true, // automatic indentation while typing based on context
+  "tabSize": 2, // standard 2-space indentation across the project
+  "insertSpaces": true, // uses spaces instead of tabs for consistent rendering
+  "detectIndentation": true, // respects existing formatting when opening files
+  "trimTrailingWhitespace": true, // removes unnecessary spaces at line endings
+  "formatFiles": true, // global switch for formatting features
+  "rulers": [100], // visual guide for maximum line length (100 characters)
+  "formatOnPaste": true, // ensures pasted code matches project style
+  "formatOnType": true, // formats code as you type for immediate feedback
+
+  /* Editor enhancements
+   * Advanced features for better editing experience
+   */
+  "editor.bracketPairColorization.enabled": true, // improves code readability with colorized brackets
+  "editor.guides.bracketPairs": true, // displays guides for matching bracket pairs
+  "editor.defaultFormatter": "esbenp.prettier-vscode", // uses Prettier as default formatter when available
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true, // applies all possible fixes when saving
+    "source.organizeImports": true // sorts imports automatically
+  },
+
+  /* Ruby configuration
+   * Settings specific to Ruby files (.rb, Gemfile, etc.)
+   */
+  "ruby": {
+    "formatOnSave": true, // ensures consistent formatting of Ruby files
+    "tabSize": 2, // standard 2-space indentation in Ruby files
+    "useTabs": false, // follows Ruby community conventions for spacing
+    "rubocop": {
+      "enabled": true, // activates RuboCop linting in editor
+      "autoFix": true, // automatically fixes common style issues
+      "configPath": ".rubocop.yml" // uses project RuboCop configuration
+    },
+    "version": "3.4.2", // ensures compatibility with project Ruby version
+    "useBundler": true, // uses bundler to run Ruby tools
+    "intellisense": "solargraph", // enables advanced code intelligence for Ruby
+    "lint": {
+      "enabled": true, // enables Ruby linting
+      "fastPath": "bundle exec rubocop" // uses bundler to run RuboCop
+    }
+  },
+  
+  /* ERB configuration
+   * Settings for Ruby embedded in HTML templates
+   */
+  "erb": {
+    "formatOnSave": true, // ensures consistent template formatting
+    "tabSize": 2, // maintains consistent indentation in templates
+    "format.enable": true, // enables formatting for ERB files
+    "lint.enabled": true // validates ERB syntax
+  },
+  
+  /* Slim configuration
+   * Settings for Slim templating language commonly used in Rails
+   */
+  "slim": {
+    "formatOnSave": true, // automatic template formatting on save
+    "tabSize": 2, // standard 2-space indentation
+    "useTabs": false, // ensures consistent indentation style
+    "slim-lint": {
+      "enabled": true, // shows errors directly while editing
+      "configPath": ".slim-lint.yml" // uses project slim-lint rules
+    },
+    "format.enable": true, // enables formatting support for Slim files
+    "validate.enable": true // validates Slim template syntax
+  },
+  
+  /* JavaScript configuration
+   * Settings for JavaScript with ESLint and Prettier integration
+   */
+  "javascript": {
+    "formatOnSave": true, // ensures consistent JS code style
+    "tabSize": 2, // standard 2-space indentation
+    "useTabs": false, // follows modern JS conventions
+    "eslint": {
+      "enabled": true, // shows errors and warnings while typing
+      "autoFix": true, // automatically fixes common issues
+      "configPath": ".eslintrc.json" // uses project ESLint rules
+    },
+    "prettier": {
+      "enabled": true, // formats code according to Prettier rules
+      "autoFix": true, // applies consistent formatting on save
+      "configPath": ".prettierrc" // uses project Prettier configuration
+    },
+    "format.enable": true, // enables JavaScript formatting
+    "validate.enable": true, // validates JavaScript code
+    "suggest.completeFunctionCalls": true, // adds parentheses when completing functions
+    "updateImportsOnFileMove.enabled": "always", // updates import paths when files are moved
+    "preferences": {
+      "quoteStyle": "single", // prefers single quotes over double quotes
+      "importModuleSpecifierPreference": "relative" // uses relative paths for imports
+    }
+  },
+  
+  /* CSS configuration
+   * Settings for CSS files
+   */
+  "css": {
+    "formatOnSave": true, // ensures consistent style in CSS files
+    "tabSize": 2, // standard 2-space indentation
+    "useTabs": false // maintains consistent indentation
+  },
+  
+  /* SCSS configuration
+   * Settings for SCSS (Sass) files
+   */
+  "scss": {
+    "formatOnSave": true, // ensures consistent style in SCSS files
+    "tabSize": 2, // standard 2-space indentation
+    "useTabs": false, // maintains consistent indentation
+    "validate": true, // validates SCSS syntax
+    "lint.compatibleVendorPrefixes": "warning", // warns about missing vendor prefixes
+    "lint.duplicateProperties": "warning", // warns about duplicate properties
+    "lint.emptyRules": "warning", // warns about empty CSS rules
+    "lint.zeroUnits": "warning", // warns about unnecessary units for zero values
+    "format.enable": true // enables SCSS formatting
+  },
+  
+  /* YAML configuration
+   * Settings for YAML files with linting
+   */
+  "yaml": {
+    "formatOnSave": true, // ensures consistent YAML formatting
+    "tabSize": 2, // standard 2-space indentation
+    "useTabs": false, // follows YAML best practices (tabs can cause issues)
+    "yaml-lint": {
+      "enabled": true // validates YAML file syntax
+    }
+  },
+  
+  /* File associations
+   * Mapping file patterns to language types for proper highlighting and formatting
+   */
+  "associations": {
+    "*.html.slim": "slim", // ensures proper handling of Slim templates
+    "*.slim": "slim", // for standalone Slim files
+    "*.html.erb": "erb", // ensures proper handling of ERB templates
+    "*.rb": "ruby", // standard Ruby file extension
+    "Gemfile": "ruby", // for proper Gemfile syntax highlighting
+    "Rakefile": "ruby", // for proper Rakefile syntax highlighting
+    "*.rake": "ruby", // for Rails rake tasks
+    "*.scss": "scss", // for SCSS stylesheets
+    "*.js": "javascript", // for JavaScript files
+    "*.jbuilder": "ruby", // for JBuilder templates
+    "*.yml.erb": "erb", // for ERB in YAML files
+    "config/routes.rb": "ruby", // Rails routes with special handling
+    "*.rb.erb": "erb" // Ruby templates with ERB
+  },
+  
+  /* Save actions
+   * Operations performed automatically when saving files
+   */
+  "saveActions": {
+    "formatDocument": true, // ensures consistent formatting of the entire file
+    "organizeImports": true // keeps imports organized and neat
+  },
+  
+  /* Editor settings
+   * Visual and behavioral settings for the editor
+   */
+  "editor.wordWrap": "off", // prevents automatic wrapping of long lines
+  
+  /* File exclusions
+   * Patterns to hide files in explorer for a cleaner workspace
+   */
+  "files.exclude": {
+    "**/.git": true, // hides Git metadata directory
+    "**/node_modules": true, // hides potentially thousands of dependency files
+    "**/tmp": true, // hides temporary files
+    "**/log": true, // hides automatically generated log files
+    "**/.DS_Store": true, // hides macOS system files
+    "**/coverage": true, // hides test coverage reports
+    "**/bower_components": true, // hides Bower dependencies
+    "**/public/assets": true, // hides compiled assets
+    "**/public/packs": true, // hides webpack output
+    "**/storage": true, // hides uploaded files
+    "**/vendor/bundle": true // hides bundled gems
+  },
+  
+  /* Search exclusions
+   * Patterns to exclude from search operations for faster results
+   */
+  "search.exclude": {
+    "**/node_modules": true, // prevents searching through third-party code
+    "**/tmp": true, // excludes temporary data from searches
+    "**/log": true, // excludes logs from searches
+    "**/vendor": true, // excludes third-party dependencies from searches
+    "**/public/assets": true, // excludes compiled assets from searches
+    "**/public/packs": true, // excludes webpack output from searches
+    "**/storage": true, // excludes uploaded files from searches
+    "db/schema.rb": true // excludes generated schema from searches
+  },
+  
+  /* File watcher exclusions
+   * Prevents monitoring changes in these directories
+   */
+  "files.watcherExclude": {
+    "**/node_modules/**": true, // prevents watching node modules
+    "**/tmp/**": true, // prevents watching temporary files
+    "**/log/**": true, // prevents watching log files
+    "**/public/assets/**": true, // prevents watching compiled assets
+    "**/public/packs/**": true, // prevents watching webpack output
+    "**/storage/**": true // prevents watching uploaded files
+  },
+  
+  /* Rails integration
+   * Settings for Rails-specific features
+   */
+  "rails": {
+    "enableGotoController": true, // enables navigation from models to controllers
+    "enableGotoModel": true, // enables navigation from controllers to models
+    "enableGotoView": true, // enables navigation from controllers to views
+    "suggestActiveRecordColumns": true, // suggests column names in models
+    "lintRailsConventions": true, // validates adherence to Rails conventions
+    "enableRailsBestPractices": true, // suggests Rails best practices
+    "enableGotoHelper": true, // enables navigation to helper methods
+    "enableGotoMigration": true, // enables navigation to migrations
+    "enableGotoFixture": true, // enables navigation to test fixtures
+    "enableGotoTest": true, // enables navigation to test files
+    "suggestAssociations": true // suggests available model associations
+  },
+  
+  /* Additional editor settings
+   * Further editor behavior configurations
+   */
+  "editor.trimAutoWhitespace": true, // removes excess spaces at line ends
+  "files.insertFinalNewline": true, // adds empty line at end of files (POSIX standard)
+  "files.encoding": "utf8", // ensures consistent character encoding
+  "files.eol": "\n", // uses Unix-style line endings (LF)
+  
+  /* Cursor-specific settings
+   * Settings specific to the Cursor editor
+   */
+  "cursor.completion.useWhitespacedIndentation": true, // respects current indentation in auto-completion
+  "telemetry.telemetryLevel": "off", // disables usage data collection for privacy
+  
+  /* Linting rules
+   * Configure standardized code style rules
+   */
+  "linting": {
+    "styleRules": {
+      "maxLineLength": 100, // maximum characters per line
+      "preferSingleQuotes": true, // prefer single quotes for strings
+      "preferTrailingCommas": true, // prefer trailing commas in multiline objects/arrays
+      "enforceSlimIndentation": true, // enforces consistent indentation in Slim templates
+      "enforceSassNesting": true // limits nesting depth in SCSS files
+    },
+    "namingConventions": {
+      "enforceRubyNamingConventions": true, // enforces Ruby naming standards
+      "enforceRailsFileNaming": true // enforces Rails file naming conventions
+    }
+  },
+  
+  /* Rails-specific snippets and templates
+   * Enable code snippets for faster development
+   */
+  "snippets": {
+    "enableRailsSnippets": true, // enables Rails-specific code snippets
+    "enableSlimSnippets": true, // enables Slim template snippets
+    "enableRubySnippets": true // enables Ruby language snippets
+  },
+
+  /* Comment for future reference - Folio CMS specific settings
+   * Note: These are custom settings and not natively supported by Cursor
+   * They are kept here as documentation for your team
+   * 
+   * "folio": {
+   *   "autoImportComponents": true,
+   *   "suggestFolioModels": true,
+   *   "lintFolioConventions": true,
+   *   "folioRepositoryPath": "https://github.com/sinfin/folio",
+   *   "checkFolioCompatibility": true
+   * },
+   */
+
+  /* Git integration
+   * Settings for enhanced Git functionality
+   */
+  "git.enableSmartCommit": true, // allows committing all changes when there are no staged changes
+  "git.confirmSync": false, // reduces confirmation prompts for Git operations
+  "git.autofetch": true // automatically fetches changes from remote
+} 

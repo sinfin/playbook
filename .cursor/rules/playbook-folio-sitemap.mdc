@@ -1,0 +1,243 @@
+---
+description: 
+globs: config/sitemap.rb
+alwaysApply: false
+---
+ ---
+description: Best practices for sitemap.rb configuration in Rails/Folio projects
+globs: config/sitemap.rb
+alwaysApply: false
+---
+
+You are an expert in SEO optimization and sitemap generation for Ruby on Rails and Folio CMS applications.
+
+## Sitemap Structure and Configuration
+- Use dynamic sitemap generation with sitemap_generator gem
+- Configure multi-site and multi-locale support for Folio projects:
+  ```ruby
+  Folio::Site.find_each do |site|
+    Folio::Current.site = site
+    
+    # Set available locales for this site
+    locales = site.locales.presence || [site.locale]
+    
+    locales.each do |locale|
+      I18n.locale = locale
+      
+      # Configure sitemap for this site/locale
+    end
+  end
+  ```
+- Set basic configuration options:
+  ```ruby
+  SitemapGenerator::Sitemap.default_host = "https://#{site.domain}"
+  SitemapGenerator::Sitemap.compress = true
+  SitemapGenerator::Sitemap.create_index = true
+  SitemapGenerator::Sitemap.public_path = 'public/'
+  SitemapGenerator::Sitemap.sitemaps_path = "sitemaps/#{site.domain}/#{locale}"
+  ```
+
+## URL Priority Guidelines
+- Set priorities based on content importance:
+  - Homepage: 1.0
+  - Main category/section pages: 0.9 (SampleProject::Page::Projects)
+  - Important content pages: 0.8 (SampleProject::Page::Articles)
+  - Standard content pages: 0.7 (other Folio::Page types)
+  - Projects and articles: 0.8
+  - Project categories: 0.7
+  - Search and utility pages: 0.5
+
+## Change Frequency Best Practices
+- Set appropriate change frequencies:
+  - Homepage: 'daily'
+  - Regularly updated content (flash articles): 'weekly'
+  - Project pages: 'monthly'
+  - Static content: 'monthly'
+
+## Performance Optimization
+- Use batch processing for large datasets:
+  ```ruby
+  Model.find_each(batch_size: 1000) do |record|
+    # sitemap generation
+  end
+  ```
+- Use scopes to filter content efficiently:
+  ```ruby
+  SampleProject::Article.published.by_site(site).find_each(batch_size: 1000)
+  ```
+- Add conditions to skip irrelevant content:
+  ```ruby
+  next unless page.class.public?
+  next if page.is_a?(SampleProject::Page::Homepage) # Already added
+  next unless article.detail_page?
+  ```
+
+## Folio Integration
+- Include all relevant Folio page types:
+  ```ruby
+  includes_image_sitemap_scope(Folio::Page).published.by_site(site).find_each do |page|
+    next unless page.class.public?
+    # Generate sitemap entry
+  end
+  ```
+- Handle singleton pages appropriately:
+  ```ruby
+  homepage = SampleProject::Page::Homepage.instance(site: site, fail_on_missing: false)
+  if homepage && homepage.published?
+    # Add to sitemap
+  end
+  ```
+- Include images in sitemap when available:
+  ```ruby
+  add(
+    path,
+    lastmod: record.updated_at,
+    images: record.image_sitemap
+  )
+  ```
+
+## Content Type Coverage
+- Include all relevant content types:
+  1. Homepage (highest priority)
+  2. Regular Folio pages
+  3. Articles
+  4. Projects
+  5. Project categories
+  6. Search pages
+
+## Multilingual Support
+- Generate separate sitemaps for each locale:
+  ```ruby
+  locales.each do |locale|
+    I18n.locale = locale
+    # Generate sitemap for this locale
+  end
+  ```
+- Use locale-specific paths in sitemap entries
+
+## SEO Optimization
+- Include lastmod attribute when available:
+  ```ruby
+  add(
+    path,
+    lastmod: record.updated_at,
+    changefreq: "weekly",
+    priority: 0.8
+  )
+  ```
+- Set appropriate search engine ping:
+  ```ruby
+  SitemapGenerator::Sitemap.ping_search_engines if Rails.env.production?
+  ```
+- Organize sitemap structure logically by domain and locale:
+  ```ruby
+  SitemapGenerator::Sitemap.sitemaps_path = "sitemaps/#{site.domain}/#{locale}"
+  ```
+
+## Example Implementation
+Complete working example for Folio multi-site with localization support:
+
+```ruby
+# frozen_string_literal: true
+
+require "folio/sitemap_generator"
+
+# Multiple site configuration
+Folio::Site.find_each do |site|
+  Folio::Current.site = site
+  
+  # Set available locales for this site
+  locales = site.locales.presence || [site.locale]
+  
+  locales.each do |locale|
+    I18n.locale = locale
+    
+    SitemapGenerator::Sitemap.default_host = "https://#{site.domain}"
+    SitemapGenerator::Sitemap.compress = true
+    SitemapGenerator::Sitemap.create_index = true
+    SitemapGenerator::Sitemap.public_path = 'public/'
+    SitemapGenerator::Sitemap.sitemaps_path = "sitemaps/#{site.domain}/#{locale}"
+    
+    SitemapGenerator::Sitemap.create do
+      default_url_options[:only_path] = true
+      
+      # Homepage
+      homepage = SampleProject::Page::Homepage.instance(site: site, fail_on_missing: false)
+      if homepage && homepage.published?
+        add(
+          root_path,
+          changefreq: "daily",
+          priority: 1.0,
+          images: homepage.image_sitemap
+        )
+      end
+      
+      # Regular Folio Pages
+      includes_image_sitemap_scope(Folio::Page).published.by_site(site).find_each(batch_size: 1000) do |page|
+        next unless page.class.public?
+        next if page.is_a?(SampleProject::Page::Homepage) # Skip homepage (already added)
+        
+        priority = case page.type
+                  when "SampleProject::Page::Projects"
+                    0.9
+                  when "SampleProject::Page::Articles"
+                    0.8
+                  else
+                    0.7
+                  end
+        
+        add(
+          page_path(page),
+          lastmod: page.updated_at,
+          changefreq: "weekly",
+          priority: priority,
+          images: page.image_sitemap
+        )
+      end
+      
+      # Flash Articles
+      SampleProject::Article.published.by_site(site).find_each(batch_size: 1000) do |article|
+        next unless article.detail_page?
+        
+        add(
+          sample_project_flash_article_path(article),
+          lastmod: article.updated_at,
+          changefreq: "weekly",
+          priority: 0.8,
+          images: article.try(:image_sitemap)
+        )
+      end
+      
+      # Projects
+      SampleProject::Project.published.by_site(site).find_each(batch_size: 1000) do |project|
+        add(
+          sample_project_project_path(project),
+          lastmod: project.updated_at,
+          changefreq: "monthly",
+          priority: 0.8,
+          images: project.try(:image_sitemap)
+        )
+      end
+      
+      # Project Categories (via projects index with filter)
+      SampleProject::ProjectCategory.by_site(site).find_each(batch_size: 1000) do |category|
+        add(
+          sample_project_projects_path(tags: category.slug),
+          changefreq: "weekly",
+          priority: 0.7
+        )
+      end
+      
+      # Search page
+      add(
+        sample_project_search_path,
+        changefreq: "monthly",
+        priority: 0.5
+      )
+    end
+  end
+end
+
+# Ping search engines in production
+SitemapGenerator::Sitemap.ping_search_engines if Rails.env.production?
+```

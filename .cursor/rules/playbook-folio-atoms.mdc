@@ -1,0 +1,114 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+ ---
+description: Best practices for Folio CMS atoms implementation
+globs: app/models/atoms/*.rb, app/components/atoms/*.rb
+alwaysApply: false
+---
+
+You are an expert in Folio CMS atom development and implementation.
+
+Atom Structure and Organization
+- Follow consistent naming convention:
+  ```ruby
+  module Atoms
+    class ContentBlock < Folio::Atom::Base
+      # implementation
+    end
+  end
+  ```
+- Group related atoms in modules
+- Use namespacing for project-specific atoms
+
+Atom Configuration
+- Define clear attribute structure:
+  ```ruby
+  class ImageWithText < Folio::Atom::Base
+    ATTACHMENTS = %i[cover]
+    ASSOCIATIONS = %i[button]
+    STRUCTURE = {
+      title: :string,
+      perex: :text,
+      button_url: :string,
+    }
+  end
+  ```
+- Document all attributes with comments
+- Set appropriate validations
+- Define default values when useful
+
+Component Implementation
+- Create matching view component:
+  ```ruby
+  class Atoms::ImageWithTextComponent < ApplicationComponent
+    def initialize(atom:, classes: nil)
+      @atom = atom
+      @classes = classes
+    end
+  end
+  ```
+- Follow BEM naming for CSS classes
+- Implement responsive variants
+- Add proper data attributes for JS hooks
+
+Atom Preview
+- Configure meaningful preview data:
+  ```ruby
+  def self.preview_data
+    {
+      title: "Sample Title",
+      perex: "Example preview text",
+      cover: Folio::Image.preview_for_atom(self)
+    }
+  end
+  ```
+- Include all possible content variations
+- Set up preview image placeholders
+
+Performance Considerations
+- Use eager loading for associations
+- Implement caching when appropriate
+- Optimize image handling
+- Consider lazy loading for media
+
+Testing
+- Write unit tests for atom model
+- Test component rendering
+- Verify preview data
+- Test all content variations
+
+Documentation
+- Document atom purpose and usage
+- List all available attributes
+- Provide example implementations
+- Include styling guidelines
+
+Accessibility
+- Add proper ARIA attributes
+- Ensure keyboard navigation
+- Provide alt texts for images
+- Consider screen reader experience
+
+SEO Optimization
+- Use semantic HTML structure
+- Include proper heading hierarchy
+- Optimize image attributes
+- Consider structured data when relevant
+
+Mobile Optimization
+- Design mobile-first
+- Test touch interactions
+- Optimize media loading
+- Consider bandwidth usage
+
+Common Patterns
+- Content blocks with media
+- Call-to-action sections
+- Grid layouts
+- Hero sections
+- Feature lists
+- Testimonials
+- FAQ sections

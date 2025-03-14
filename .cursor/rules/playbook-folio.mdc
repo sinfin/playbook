@@ -1,0 +1,94 @@
+---
+description: Core implementation instruction for project
+globs: *.rb, *.rake
+alwaysApply: false
+---
+You are an expert in Ruby on Rails, PostgreSQL, Bootstrap, SASS, Slim templates, GitHub View Components, and the Folio CMS framework.
+
+Planning and Project Setup
+- Start with component/feature planning before implementation:
+  1. Identify data structure and relationships
+  2. Map out necessary models and their associations
+  3. Plan UI components and their hierarchy
+  4. Consider performance implications
+  
+Component Selection Guidelines
+- Choose between implementation approaches based on:
+  1. Atoms: For content blocks manageable through Folio console
+  2. View Components: For reusable UI elements with complex logic
+  3. Partials: For simple view fragments without business logic
+  4. Service Objects: For complex business operations
+  5. Concerns: For shared behavior across multiple models/controllers
+
+Project Seeding and Defaults
+- Use Folio's seeding conventions for initial data
+- Implement seed files for:
+  1. Essential site content and configurations
+  2. Demo content for development
+  3. Test data for different environments
+- Use placeholder images with meaningful dimensions:
+  - Hero images: 1920x1080px
+  - Thumbnails: 400x300px
+  - Avatar placeholders: 200x200px
+- Create base atom types with example content
+- Set up default site configurations and menus
+  
+Code Style and Structure
+- Write concise, idiomatic Ruby code that follows Rails conventions.
+- Follow Folio CMS architecture patterns from https://github.com/sinfin/folio/wiki.
+- Prefer object-oriented and functional programming patterns appropriate for the situation.
+- Structure code according to Rails and Folio CMS conventions.
+- Implement service objects for complex business logic.
+- Use modular components for reusable UI elements.
+
+Naming Conventions
+- Use snake_case for file names, method names, and variables.
+- Use CamelCase for class and module names.
+- Follow Folio naming conventions for atoms, models, and components.
+- Name models in singular form (User) and controllers in plural form (UsersController).
+- Prefix partial templates with underscore (_form.slim).
+
+Ruby and Rails Usage
+- Leverage Rails' built-in helpers and methods.
+- Use ActiveRecord effectively including associations, validations, and callbacks.
+- Implement concerns for shared behavior across models or controllers.
+- Follow RESTful routing conventions.
+- Use background jobs (Sidekiq) for time-consuming tasks.
+
+Folio CMS Integration
+- Utilize Folio's atom-based content architecture.
+- Implement and extend Folio console functionality appropriately.
+- Follow Folio component patterns for UI elements.
+- Use Folio's media library for file handling.
+- Extend Folio models according to project requirements.
+
+Frontend Technologies
+- Use Bootstrap for responsive UI design.
+- Write structured SASS following Folio conventions.
+- Implement Slim templates for views.
+- Utilize GitHub View Components for modular frontend.
+- Follow StandardJS for JavaScript code quality.
+
+Performance Optimization
+- Use database indexing for frequently queried columns.
+- Implement eager loading to avoid N+1 queries.
+- Use caching strategies (fragment caching, Russian Doll caching).
+- Optimize database queries using includes, joins, or select.
+
+Security Best Practices
+- Use strong parameters in controllers.
+- Implement proper authentication and authorization.
+- Protect against common web vulnerabilities (XSS, CSRF, SQL injection).
+- Follow Rails security guidelines.
+
+Testing
+- Write comprehensive tests for models, controllers, and components.
+- Use FactoryBot for test data generation.
+- Test Folio extensions thoroughly.
+
+Documentation and Resources
+- Ruby on Rails: https://guides.rubyonrails.org/
+- Folio CMS: https://github.com/sinfin/folio
+- Bootstrap: https://getbootstrap.com/docs/
+- Slim: http://slim-lang.com/
+- GitHub View Components: https://viewcomponent.org/ 
