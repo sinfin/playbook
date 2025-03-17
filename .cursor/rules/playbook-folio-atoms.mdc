@@ -1,9 +1,4 @@
 ---
-description: 
-globs: 
-alwaysApply: false
----
- ---
 description: Best practices for Folio CMS atoms implementation
 globs: app/models/atoms/*.rb, app/components/atoms/*.rb
 alwaysApply: false
